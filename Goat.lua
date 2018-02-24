@@ -28,7 +28,7 @@ function Goat:eat()
 	self.food = self.food - 5
 	return 5
 end
-function Goat:reciveDmg(dmg)
+function Goat:receiveDmg(dmg)
 	self.life = self.life - dmg
 	self.scared = true 
 end
