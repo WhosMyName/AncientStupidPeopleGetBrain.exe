@@ -1,4 +1,5 @@
 local Berry = {}
+Berry.r = 5
 
 local mt = {__index = Berry}
 
@@ -11,9 +12,11 @@ function Berry.new(x, y)
     return new
 end
 
-function Berry:draw(x, y, scale)
-    love.graphics.setColor(255,0,0)
-    love.graphics.circle("line",x,y,scale)
+function Berry:draw()
+    r, g, b, a = love.graphics.getColor( )
+	love.graphics.setColor(255,0,0)
+	love.graphics.circle("line", self.x, self.y, Tree.r)
+	love.graphics.setColor(r, g, b, a)
 end
 
 function Berry:harvest()
