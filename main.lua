@@ -6,7 +6,7 @@ Actor = require "Actor"
 world = {}
 WORLD_SIZE = 10
 DRAW_SIZE = 20
-
+math.randomseed(os.time)
 for x =1,WORLD_SIZE do
   world[x] = {}
 end

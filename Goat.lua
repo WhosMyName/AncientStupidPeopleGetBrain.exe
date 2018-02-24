@@ -9,6 +9,7 @@ function Goat.new(x, y)
 	self.life = 5
 	self.x = x
 	self.y = y 
+	self.scared = false
 	setmetatable(new, mt)
 	return new
 end
@@ -16,18 +17,20 @@ function Goat:eat()
 	if self.life > 0 then
 		self.life = self.life -1 
 		return -1
-	end	
+	end
+		
 	if self.food <= 5 then 
 		food = self.food
 		world[x][y] = nil
 		return food
 	end
-	self.food = self.food - 5
 	
+	self.food = self.food - 5
 	return 5
 end
 function Goat:reciveDmg(dmg)
-	self.life = self.life - dmg 
+	self.life = self.life - dmg
+	self.scared = true 
 end
 function Goat:move(dx, dy)
   local new_x = math.max(math.min(WORLD_SIZE,self.x+dx),1)
@@ -40,7 +43,11 @@ function Goat:move(dx, dy)
     self.y = new_y
   end
 end
-
+function Goat:update(dt)
+	if(self.scared == true)then
+		self:move(math.random(-1,1), math.random(-1,1))
+	end
+end
 function Goat:draw()
 	r, g, b, a = love.graphics.getColor( )
 	love.graphics.setColor(128,128,128)
