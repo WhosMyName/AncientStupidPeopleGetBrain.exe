@@ -3,20 +3,29 @@ local Actor = {}
 
 local mt = { __index = Actor }
 
-function Actor.new()
-  local new = {}
+function Actor.new(x,y)
+  local new = {x=x,y=y}
   new.Brain = require 'deepqlearn'
-  new.Brain.init(1, 2)   
+  new.Brain.init(1, 3)   
   setmetatable(new,mt)
   return new
 end
 
 function Actor:draw(x,y,scale)
-  love.graphics.setColor(255,0,0)
+  love.graphics.setColor(0,200,200)
   love.graphics.circle("fill",x,y,scale)
 end
 
-function Actor:move(field)
+function Actor:move(dx,dy)
+  local new_x = math.max(math.min(WORLD_SIZE,self.x+dx),1)
+  local new_y = math.max(math.min(WORLD_SIZE,self.y+dy),1)
+  if not world[new_x][new_y] then
+    world[new_x][new_y] = self
+    --print(new_x .. " " .. new_y)
+    world[self.x][self.y] = nil
+    self.x = new_x
+    self.y = new_y
+  end
 end
 
 function Actor:noexplore()
@@ -24,19 +33,9 @@ function Actor:noexplore()
   self.Brain.learning = false;
 end
 
-function Actor:step(sensations)
+function Actor:step(sensations,reward)
   local state = table.copy(sensations) -- make a deep copy
   local action = self.Brain.forward(state) -- returns index of chosen action
-
-  print("action" .. action)
-  local reward
-  if action == 1 then
-    reward = 1
-  else
-    reward = 0
-  end
-
-  print(reward)
    
   self.Brain.backward(reward) -- learning magic happens 
 
